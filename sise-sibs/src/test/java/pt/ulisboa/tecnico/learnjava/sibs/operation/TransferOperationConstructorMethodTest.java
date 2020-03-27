@@ -28,16 +28,6 @@ public class TransferOperationConstructorMethodTest {
 	}
 
 	@Test(expected = OperationException.class)
-	public void nonPositiveValue() throws OperationException {
-		new TransferOperation(SOURCE_IBAN, TARGET_IBAN, 0, services);
-	}
-
-	@Test(expected = OperationException.class)
-	public void nullSourceIban() throws OperationException {
-		new TransferOperation(null, TARGET_IBAN, 100, services);
-	}
-
-	@Test(expected = OperationException.class)
 	public void emptySourceIban() throws OperationException {
 		new TransferOperation("", TARGET_IBAN, 100, services);
 	}

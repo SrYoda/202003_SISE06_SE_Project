@@ -67,7 +67,11 @@ public class MBWayAccountView {
 
 	public void menuOptions() {
 		System.out.println(
-				"** Thank you for using MBWay** \n \n \n Please input one of the choices\n 1 - Subscrite to our service\n 2 - confirm your account\n 3 - Make a transfer\n 4 - Split Bill \n 5 - Add a Friend \n 0 -Exit \n Your Option :   ");
+				"** Thank you for using MBWay** \n \n \n Please write one of the choices\n exit \n associate-mbway \n confirm-mbway \n mbway-transfer \n mbway-split-bill \n mbway-addfriend \n\n Your Option :   ");
+	}
+
+	public void menuOptionsSplitBill() {
+		System.out.println("Write one of the opitions \n Add-friend \n Terminate \n Your choice >>");
 	}
 
 	public void pleaseSummitActivationCode() {
@@ -75,7 +79,7 @@ public class MBWayAccountView {
 	}
 
 	public void activationCode(String code) {
-		System.out.println("\n\n\n This is your confirmation code, please keep it safe   " + code + "\n\n");
+		System.out.println("\n\nThis is your confirmation code, please keep it safe  >>> " + code + "\n");
 	}
 
 	public void wrongActivationCode() {
@@ -89,6 +93,11 @@ public class MBWayAccountView {
 
 	public void invalidInputMenu() {
 		System.out.println("Your input is not Valid please try again");
+	}
+
+	public void succesfullAddFriend() {
+		System.out.println("\n Congrats! You added a friend \n");
+
 	}
 
 }

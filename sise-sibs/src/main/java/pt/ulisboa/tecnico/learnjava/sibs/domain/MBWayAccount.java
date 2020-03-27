@@ -40,6 +40,15 @@ public class MBWayAccount {
 	}
 
 	public void addAccount(String phoneNumber, MBWayAccount account) {
+		MBWayAccount newAccount = new MBWayAccount();
+
+		newAccount.setIban(getIban());
+		newAccount.setPhonenumber(getPhonenumber());
+
+		this.DBMBWayAccounts.put(phoneNumber, newAccount);
+	}
+
+	public void updateAccount(String phoneNumber, MBWayAccount account) {
 		this.DBMBWayAccounts.put(phoneNumber, account);
 	}
 
@@ -57,6 +66,10 @@ public class MBWayAccount {
 
 	public boolean verifyIfFriend(String friendPhoneNumber) {
 		return this.friends.contains(friendPhoneNumber);
+	}
+
+	public HashMap getDBMBWayAccounts() {
+		return this.DBMBWayAccounts;
 	}
 
 }

@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.learnjava.sibs.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+import pt.ulisboa.tecnico.learnjava.bank.exceptions.ServicesException;
 import pt.ulisboa.tecnico.learnjava.bank.services.Services;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.SibsException;
@@ -10,6 +11,7 @@ import pt.ulisboa.tecnico.learnjava.sibs.exceptions.SibsException;
 public class Sibs {
 	final Operation[] operations;
 	final Services services;
+
 	final HashMap<Integer, TransferOperation> transferOperations;
 	// The reason we chose a HashMap data structure is because an ID must be
 	// attributed
@@ -22,7 +24,8 @@ public class Sibs {
 		this.services = services;
 	}
 
-	public void transfer(String sourceIban, String targetIban, int amount) throws OperationException, SibsException {
+	public void transfer(String sourceIban, String targetIban, int amount)
+			throws OperationException, SibsException, ServicesException {
 
 		TransferOperation transferOperation;
 		transferOperation = new TransferOperation(sourceIban, targetIban, amount, this.services);
@@ -36,7 +39,7 @@ public class Sibs {
 	public void processOperations() {
 		for (Map.Entry mapElement : this.transferOperations.entrySet()) {
 			if (!this.transferOperations.get(mapElement.getKey()).getCanceledState().equals(SCompleted.class)
-					|| !this.transferOperations.get(mapElement.getKey()).getCanceledState().equals(SCanceled.class)) {
+					&& !this.transferOperations.get(mapElement.getKey()).getCanceledState().equals(SCanceled.class)) {
 				this.transferOperations.get(mapElement.getKey()).process();
 			}
 		}
@@ -132,5 +135,11 @@ public class Sibs {
 			}
 		}
 		return result;
+	}
+
+	// This method was created to asses what will happen if by some reason the
+	// Services is down
+	public void setServiceToNull(int transferOperationCacelID) {
+		this.transferOperations.get(transferOperationCacelID).setServicesToNull();
 	}
 }

@@ -13,7 +13,6 @@ public class Services {
 
 	public void withdraw(String iban, int amount) throws AccountException {
 		Account account = getAccountByIban(iban);
-
 		account.withdraw(amount);
 	}
 
@@ -28,4 +27,14 @@ public class Services {
 		return account;
 	}
 
+	public boolean AccountExists(String iban) {
+		if (this.getAccountByIban(iban) == null) {
+			return false;
+		}
+		return true;
+	}
+
+	public String getBankCodeByIban(String iban) {
+		return iban.substring(0, 3);
+	}
 }

@@ -1,9 +1,11 @@
 package pt.ulisboa.tecnico.learnjava.sibs.domain;
 
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.AccountException;
+import pt.ulisboa.tecnico.learnjava.bank.exceptions.ServicesException;
 
 public class SRegistered implements TransferOperationState {
 	TransferOperation transferOperation;
+	int counter = 0;
 
 	public SRegistered(TransferOperation newTransferOperation) {
 		this.transferOperation = newTransferOperation;
@@ -16,14 +18,16 @@ public class SRegistered implements TransferOperationState {
 		try {
 			this.transferOperation.getService().withdraw(this.transferOperation.getSourceIban(),
 					this.transferOperation.getValue());
-		} catch (AccountException e) {
-			System.out.println("Something went wrong with the SRegisted");
-			this.transferOperation.setTransferOperationState(this.transferOperation.getErrorState());
+			this.transferOperation.setTransferOperationState(this.transferOperation.getWithdrawnState());
+		} catch (AccountException | ServicesException e) {
+			if (this.counter == 2) {
+				this.transferOperation.setTransferOperationState(this.transferOperation.getErrorState());
+			} else {
+				this.counter += 1;
+			}
+			System.out.println("Something went wrong with the SRegistration");
 
 		}
-
-		this.transferOperation.setTransferOperationState(this.transferOperation.getWithdrawnState());
-
 	}
 
 	@Override

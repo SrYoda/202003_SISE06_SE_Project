@@ -11,6 +11,7 @@ import pt.ulisboa.tecnico.learnjava.bank.domain.Client;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.AccountException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.BankException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.ClientException;
+import pt.ulisboa.tecnico.learnjava.bank.exceptions.ServicesException;
 import pt.ulisboa.tecnico.learnjava.bank.services.Services;
 import pt.ulisboa.tecnico.learnjava.sibs.domain.Operation;
 import pt.ulisboa.tecnico.learnjava.sibs.domain.Sibs;
@@ -42,7 +43,8 @@ public class TransferMethodTest {
 	}
 
 	@Test
-	public void success() throws BankException, AccountException, SibsException, OperationException, ClientException {
+	public void success() throws BankException, AccountException, SibsException, OperationException, ClientException,
+			ServicesException {
 		String sourceIban = this.sourceBank.createAccount(Bank.AccountType.CHECKING, this.sourceClient, 1000, 0);
 		String targetIban = this.targetBank.createAccount(Bank.AccountType.CHECKING, this.targetClient, 1000, 0);
 		System.out.println(sourceIban);
@@ -57,6 +59,21 @@ public class TransferMethodTest {
 		assertEquals(100, this.sibs.getTotalValueOfOperations());
 		assertEquals(100, this.sibs.getTotalValueOfOperationsForType(Operation.OPERATION_TRANSFER));
 		assertEquals(0, this.sibs.getTotalValueOfOperationsForType(Operation.OPERATION_PAYMENT));
+	}
+
+	@Test(expected = OperationException.class)
+	public void failConstructorTargetIban() throws BankException, AccountException, SibsException, OperationException,
+			ClientException, ServicesException {
+		String sourceIban = this.sourceBank.createAccount(Bank.AccountType.CHECKING, this.sourceClient, 1000, 0);
+		this.sibs.transfer(sourceIban, null, 100);
+	}
+
+	@Test(expected = OperationException.class)
+	public void failConstructorSouceIban() throws BankException, AccountException, SibsException, OperationException,
+			ClientException, ServicesException {
+		String targetIban = this.targetBank.createAccount(Bank.AccountType.CHECKING, this.targetClient, 1000, 0);
+
+		this.sibs.transfer(null, targetIban, 100);
 	}
 
 	@After

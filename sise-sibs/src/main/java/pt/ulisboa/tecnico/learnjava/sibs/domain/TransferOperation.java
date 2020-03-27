@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.learnjava.sibs.domain;
 
+import pt.ulisboa.tecnico.learnjava.bank.exceptions.ServicesException;
 import pt.ulisboa.tecnico.learnjava.bank.services.Services;
 import pt.ulisboa.tecnico.learnjava.sibs.exceptions.OperationException;
 
@@ -82,8 +83,20 @@ public class TransferOperation extends Operation {
 		return name == null || name.length() == 0;
 	}
 
-	public Services getService() {
+	public Services getService() throws ServicesException {
+		serviceVerification();
 		return this.services;
+
+	}
+
+	public void serviceVerification() throws ServicesException {
+		if (this.services == null) {
+			throw new ServicesException();
+		}
+	}
+
+	public void setServicesToNull() {
+		this.services = null;
 	}
 
 	@Override

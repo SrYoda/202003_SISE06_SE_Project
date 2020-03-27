@@ -1,10 +1,12 @@
 package pt.ulisboa.tecnico.learnjava.sibs.domain;
 
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.AccountException;
+import pt.ulisboa.tecnico.learnjava.bank.exceptions.ServicesException;
 
 public class SWithdrawn implements TransferOperationState {
 
 	TransferOperation transferOperation;
+	int counter = 0;
 
 	public SWithdrawn(TransferOperation newTransferOperation) {
 		this.transferOperation = newTransferOperation;
@@ -16,28 +18,36 @@ public class SWithdrawn implements TransferOperationState {
 
 		if ((this.transferOperation.getTargetIban().substring(0, 3)
 				.equals(this.transferOperation.getSourceIban().substring(0, 3)))) {
-
 			try {
 				this.transferOperation.getService().deposit(this.transferOperation.getTargetIban(),
 						this.transferOperation.getValue());
-			} catch (AccountException e) {
+				this.transferOperation.setTransferOperationState(this.transferOperation.getCompletedState());
+			} catch (AccountException | ServicesException e) {
+				if (this.counter == 2) {
+					this.transferOperation.setTransferOperationState(this.transferOperation.getErrorState());
+				} else {
+					this.counter += 1;
+				}
 				System.out.println("Something went wrong with the SWithdrawn Same Bank");
-				this.transferOperation.setTransferOperationState(this.transferOperation.getErrorState());
-
 			}
-			this.transferOperation.setTransferOperationState(this.transferOperation.getCompletedState());
+
 		}
 
 		else {
 			try {
 				this.transferOperation.getService().deposit(this.transferOperation.getTargetIban(),
 						this.transferOperation.getValue());
-			} catch (AccountException e) {
-				System.out.println("Something went wrong with the SWithdrawn Different Bank");
-				this.transferOperation.setTransferOperationState(this.transferOperation.getErrorState());
+				this.transferOperation.setTransferOperationState(this.transferOperation.getDepositedState());
+			} catch (AccountException | ServicesException e) {
+				if (this.counter == 2) {
+					this.transferOperation.setTransferOperationState(this.transferOperation.getErrorState());
+				} else {
+					this.counter += 1;
+				}
+				System.out.println("Something went wrong with the SWithdrawn Same Bank");
 
 			}
-			this.transferOperation.setTransferOperationState(this.transferOperation.getDepositedState());
+
 		}
 
 	}
@@ -47,13 +57,16 @@ public class SWithdrawn implements TransferOperationState {
 		try {
 			this.transferOperation.getService().deposit(this.transferOperation.getSourceIban(),
 					this.transferOperation.getValue());
-		} catch (AccountException e) {
+			this.transferOperation.setTransferOperationState(this.transferOperation.getCanceledState());
+		} catch (AccountException | ServicesException e) {
+			if (this.counter == 2) {
+				this.transferOperation.setTransferOperationState(this.transferOperation.getErrorState());
+			} else {
+				this.counter += 1;
+			}
 			System.out.println("Something went wrong with the SWithdrawn Canceled Operation");
-			this.transferOperation.setTransferOperationState(this.transferOperation.getErrorState());
 
 		}
-
-		this.transferOperation.setTransferOperationState(this.transferOperation.getCanceledState());
 
 	}
 }

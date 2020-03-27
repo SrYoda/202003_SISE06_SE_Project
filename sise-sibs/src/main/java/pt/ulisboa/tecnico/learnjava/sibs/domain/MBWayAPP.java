@@ -70,24 +70,109 @@ public class MBWayAPP {
 		controller.viewMenu();
 
 		Scanner scan = new Scanner(System.in);
-		int i = scan.nextInt();
+		String i = scan.nextLine();
 
-		while (0 != i) {
+		while (!i.equals("exit")) {
 
-			if (1 == i) {
-				controller.associateMbWay();
+			if (i.equals("associate-mbway")) {
+				controller.getView().askForIban();
+				Scanner ib = new Scanner(System.in);
+				String Iban = ib.nextLine();
 
-			} else if (2 == i) {
-				controller.confirmMbWay();
+				controller.getView().askForPhoneNumber();
+				Scanner pn = new Scanner(System.in);
+				String phoneNumber = pn.nextLine();
 
-			} else if (3 == i) {
-				controller.MBWayTransfer();
+				controller.associateMbWay(Iban, phoneNumber);
 
-			} else if (4 == i) {
-				controller.MBWaySplitBill();
+			} else if (i.equals("confirm-mbway")) {
+				controller.getView().pleaseSummitActivationCode();
 
-			} else if (5 == i) {
-				controller.addFriend();
+				Scanner cd = new Scanner(System.in);
+				String inputCode = cd.nextLine();
+
+				controller.confirmMbWay(inputCode);
+
+			} else if (i.equals("mbway-transfer")) {
+
+				controller.getView().askForPhoneNumber();
+				Scanner srPN = new Scanner(System.in);
+				String sourcePhoneNumber = srPN.nextLine();
+
+				controller.getView().askForTargetPhoneNumber();
+				Scanner tgPN = new Scanner(System.in);
+				String targetPhoneNumber = tgPN.nextLine();
+
+				controller.getView().askForAmount();
+				Scanner amt = new Scanner(System.in);
+				int amount = amt.nextInt();
+
+				controller.MBWayTransfer(sourcePhoneNumber, targetPhoneNumber, amount);
+
+			} else if (i.equals("mbway-split-bill")) {
+				// The phone number of the establishement charging the bill
+				controller.getView().askForTargetPhoneNumber();
+				Scanner responsiblePN = new Scanner(System.in);
+				String targetPhoneNumber = responsiblePN.nextLine();
+				controller.setTargetPhoneNumber(targetPhoneNumber);
+
+				// The bill
+				controller.getView().askForBill();
+				Scanner b = new Scanner(System.in);
+				int bill = b.nextInt();
+
+				int soma = 0;
+				int counterOfFriends = 0;
+
+				// As for your phoneNumber
+				controller.getView().askForPhoneNumber();
+				Scanner yPN = new Scanner(System.in);
+				String yourPhoneNumber = yPN.nextLine();
+				controller.setYourPhoneNumber(yourPhoneNumber);
+
+				// The amount that you want to pay
+				controller.getView().askForAmount();
+				Scanner amount1 = new Scanner(System.in);
+				int amount = amount1.nextInt();
+
+				controller.addTransfer(yourPhoneNumber, amount);
+
+				controller.getView().menuOptionsSplitBill();
+				Scanner scan1 = new Scanner(System.in);
+				String a = scan1.nextLine();
+
+				while (!a.equals("Terminate")) {
+
+					counterOfFriends += 1;
+
+					// Input friends phone Number
+					controller.getView().askForFriendsPhoneNumber();
+					Scanner friend = new Scanner(System.in);
+					String friendPhoneNumber = friend.nextLine();
+
+					controller.getView().askForAmount();
+					Scanner am = new Scanner(System.in);
+					int amountfriend = am.nextInt();
+
+					soma += amount;
+
+					controller.addTransfer(yourPhoneNumber, amountfriend);
+
+				}
+
+				controller.MBWaySplitBill(counterOfFriends, bill);
+			}
+
+			else if (i.equals("mbway-addfriend")) {
+				controller.getView().askForPhoneNumber();
+				Scanner yourPhone = new Scanner(System.in);
+				String phoneNumber = yourPhone.nextLine();
+
+				controller.getView().askForFriendsPhoneNumber();
+				Scanner newFriendPhoneNumber = new Scanner(System.in);
+				String friendPhoneNumber = newFriendPhoneNumber.nextLine();
+
+				controller.addFriend(phoneNumber, friendPhoneNumber);
 
 			} else {
 				controller.viewInvalidInputMenu();
@@ -95,8 +180,10 @@ public class MBWayAPP {
 
 			controller.viewMenu();
 			Scanner scan1 = new Scanner(System.in);
-			i = scan1.nextInt();
+			i = scan.nextLine();
 
 		}
+
+		System.out.println("MBWAY was terminated");
 	}
 }
