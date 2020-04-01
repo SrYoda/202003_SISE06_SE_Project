@@ -43,9 +43,9 @@ public class Client {
 			throw new ClientException();
 		}
 
-//		if (phoneNumber.length() != 9 || !phoneNumber.matches("[0-9]+")) {
-//			throw new ClientException();
-//		}
+		if (phoneNumber.length() != 9 || !phoneNumber.matches("[0-9]+")) {
+			throw new ClientException();
+		}
 
 		if (bank.getClientByNif(nif) != null) {
 			throw new ClientException();

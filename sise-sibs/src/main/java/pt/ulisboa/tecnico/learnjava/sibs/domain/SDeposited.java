@@ -21,14 +21,14 @@ public class SDeposited implements TransferOperationState {
 			this.transferOperation.setTransferOperationState(this.transferOperation.getCompletedState());
 		} catch (AccountException | ServicesException e) {
 			if (this.counter == 2) {
+
 				this.transferOperation.setTransferOperationState(this.transferOperation.getErrorState());
+
 			} else {
 				this.counter += 1;
 			}
 			System.out.println("Something went wrong with the SDeposited");
-
 		}
-
 	}
 
 	@Override
@@ -39,7 +39,6 @@ public class SDeposited implements TransferOperationState {
 			this.transferOperation.getService().withdraw(this.transferOperation.getTargetIban(),
 					this.transferOperation.getValue());
 			this.transferOperation.setTransferOperationState(this.transferOperation.getCanceledState());
-
 		} catch (AccountException | ServicesException e) {
 			if (this.counter == 2) {
 				this.transferOperation.setTransferOperationState(this.transferOperation.getErrorState());

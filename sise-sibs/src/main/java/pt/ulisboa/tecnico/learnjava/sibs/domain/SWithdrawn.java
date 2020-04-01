@@ -30,10 +30,7 @@ public class SWithdrawn implements TransferOperationState {
 				}
 				System.out.println("Something went wrong with the SWithdrawn Same Bank");
 			}
-
-		}
-
-		else {
+		} else {
 			try {
 				this.transferOperation.getService().deposit(this.transferOperation.getTargetIban(),
 						this.transferOperation.getValue());
@@ -44,12 +41,9 @@ public class SWithdrawn implements TransferOperationState {
 				} else {
 					this.counter += 1;
 				}
-				System.out.println("Something went wrong with the SWithdrawn Same Bank");
-
+				System.out.println("Something went wrong with the SWithdrawn Differents Bank");
 			}
-
 		}
-
 	}
 
 	@Override
@@ -65,8 +59,6 @@ public class SWithdrawn implements TransferOperationState {
 				this.counter += 1;
 			}
 			System.out.println("Something went wrong with the SWithdrawn Canceled Operation");
-
 		}
-
 	}
 }
